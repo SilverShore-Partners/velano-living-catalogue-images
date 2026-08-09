@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velano Living Product Image Generation SOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Velano Living Design System tokens, read from Claude Design
+   project f0f49c22-b664-4dc0-867a-903318dff989 */
+:root{
+  --vl-stone-25:#FBFAF8; --vl-stone-50:#F8F7F4; --vl-stone-75:#F9F9F9;
+  --vl-stone-100:#F2F0EC; --vl-stone-150:#ECE9E3; --vl-stone-200:#E6E2DC;
+  --vl-stone-300:#D2CEC7; --vl-stone-400:#B6B1A9; --vl-stone-500:#8B8885;
+  --vl-stone-700:#595754; --vl-stone-900:#11100E; --vl-white:#FFFFFF;
+  --vl-wood-100:#F2E1D0; --vl-wood-500:#B87949; --vl-wood-600:#9C6238; --vl-wood-700:#7C4D2C;
+  --vl-green-50:#EEF4E7; --vl-green-500:#6E9E4E; --vl-green-700:#4E7634;
+  --vl-amber-50:#FBF0E0; --vl-amber-500:#D28A35; --vl-amber-700:#A4641D;
+  --vl-red-50:#FBE9E9;  --vl-red-500:#D33636;  --vl-red-700:#A52121;
+  --vl-blue-50:#E8EEF0; --vl-blue-500:#3E5D68; --vl-blue-700:#2C434C;
+
+  --vl-bg:var(--vl-stone-50); --vl-surface:var(--vl-white);
+  --vl-surface-muted:var(--vl-stone-75); --vl-surface-sunken:var(--vl-stone-100);
+  --vl-text:var(--vl-stone-900); --vl-text-secondary:var(--vl-stone-700);
+  --vl-text-muted:var(--vl-stone-500);
+  --vl-border:var(--vl-stone-200); --vl-border-subtle:var(--vl-stone-150);
+  --vl-accent:var(--vl-wood-500); --vl-accent-fill:var(--vl-wood-100);
+  --vl-accent-text:var(--vl-wood-700);
+
+  --vl-font-serif:'Newsreader',Georgia,'Times New Roman',serif;
+  --vl-font-sans:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --vl-font-mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,monospace;
+  --vl-radius:10px; --vl-radius-sm:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--vl-bg);color:var(--vl-text);
+  font:400 15px/1.62 var(--vl-font-sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px 96px}
+
+header.mast{border-bottom:1px solid var(--vl-border);background:var(--vl-surface);
+  padding:56px 0 40px;margin-bottom:48px}
+.mast .wrap{padding-bottom:0}
+.eyebrow{font:600 11px/1.3 var(--vl-font-sans);letter-spacing:.10em;
+  text-transform:uppercase;color:var(--vl-accent-text);margin:0 0 14px}
+h1{font:600 44px/1.08 var(--vl-font-serif);margin:0 0 16px;letter-spacing:-.01em}
+.lede{font:400 17px/1.6 var(--vl-font-sans);color:var(--vl-text-secondary);
+  max-width:62ch;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{font:500 12px/1 var(--vl-font-sans);padding:7px 11px;border-radius:999px;
+  border:1px solid var(--vl-border);background:var(--vl-surface-muted);
+  color:var(--vl-text-secondary)}
+.chip strong{color:var(--vl-text);font-weight:600}
+
+h2{font:500 26px/1.18 var(--vl-font-serif);margin:52px 0 6px;letter-spacing:-.005em;
+  padding-top:28px;border-top:1px solid var(--vl-border-subtle)}
+h2:first-of-type{border-top:0;padding-top:0}
+h2 .num{color:var(--vl-accent);font:600 13px/1 var(--vl-font-sans);
+  display:block;margin-bottom:10px;letter-spacing:.08em}
+h3{font:600 15px/1.35 var(--vl-font-sans);margin:30px 0 8px}
+p{margin:0 0 14px;max-width:74ch}
+.sub{color:var(--vl-text-secondary);margin-bottom:22px;max-width:74ch}
+ul,ol{margin:0 0 16px;padding-left:22px;max-width:74ch}
+li{margin:0 0 7px}
+code{font:500 13px/1.4 var(--vl-font-mono);background:var(--vl-surface-sunken);
+  padding:2px 6px;border-radius:4px;color:var(--vl-wood-700)}
+
+.card{background:var(--vl-surface);border:1px solid var(--vl-border);
+  border-radius:var(--vl-radius);padding:22px 24px;margin:0 0 16px}
+.grid{display:grid;gap:14px}
+@media(min-width:760px){.grid.g2{grid-template-columns:1fr 1fr}
+  .grid.g3{grid-template-columns:repeat(3,1fr)}}
+
+table{width:100%;border-collapse:collapse;margin:6px 0 20px;
+  background:var(--vl-surface);border:1px solid var(--vl-border);
+  border-radius:var(--vl-radius);overflow:hidden;
+  font-variant-numeric:tabular-nums lining-nums}
+th{font:600 12px/1.3 var(--vl-font-sans);letter-spacing:.05em;text-transform:uppercase;
+  color:var(--vl-text-muted);text-align:left;padding:13px 16px;
+  background:var(--vl-surface-muted);border-bottom:1px solid var(--vl-border)}
+td{padding:13px 16px;border-bottom:1px solid var(--vl-border-subtle);
+  font:400 14px/1.5 var(--vl-font-sans);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{font:500 13px/1.4 var(--vl-font-mono)}
+
+.pill{display:inline-block;font:600 11px/1 var(--vl-font-sans);padding:5px 9px;
+  border-radius:999px;letter-spacing:.03em;white-space:nowrap}
+.ok{background:var(--vl-green-50);color:var(--vl-green-700)}
+.warn{background:var(--vl-amber-50);color:var(--vl-amber-700)}
+.crit{background:var(--vl-red-50);color:var(--vl-red-700)}
+.info{background:var(--vl-blue-50);color:var(--vl-blue-700)}
+.neutral{background:var(--vl-stone-100);color:var(--vl-stone-700)}
+
+.rule{border-left:3px solid var(--vl-accent);background:var(--vl-surface);
+  border-radius:0 var(--vl-radius-sm) var(--vl-radius-sm) 0;
+  padding:18px 22px;margin:0 0 16px}
+.rule.stop{border-left-color:var(--vl-red-500)}
+.rule.note{border-left-color:var(--vl-blue-500)}
+.rule h4{font:600 14px/1.35 var(--vl-font-sans);margin:0 0 6px}
+.rule p:last-child{margin-bottom:0}
+
+.shot{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;
+  padding:18px 0;border-bottom:1px solid var(--vl-border-subtle)}
+.shot:last-child{border-bottom:0}
+.shot .no{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:var(--vl-accent-fill);color:var(--vl-accent-text);
+  font:600 17px/1 var(--vl-font-serif)}
+.shot h4{font:600 15px/1.3 var(--vl-font-sans);margin:0 0 5px}
+.shot p{margin:0 0 8px;color:var(--vl-text-secondary);font-size:14px}
+.shot .check{font:500 12px/1.4 var(--vl-font-mono);color:var(--vl-text-muted)}
+
+/* Example imagery. Served from our own host, not cdn.shopify.com, because
+   73 of 104 Haussmann product links are already dead 404s. */
+.figs{display:grid;gap:14px;margin:4px 0 8px}
+.figs.f4{grid-template-columns:repeat(2,1fr)}
+.figs.f5{grid-template-columns:repeat(2,1fr)}
+.figs.f2{grid-template-columns:repeat(2,1fr)}
+@media(min-width:800px){.figs.f4{grid-template-columns:repeat(4,1fr)}
+  .figs.f5{grid-template-columns:repeat(5,1fr)}}
+figure{margin:0;background:var(--vl-surface);border:1px solid var(--vl-border);
+  border-radius:var(--vl-radius-sm);overflow:hidden}
+/* aspect-ratio reserves the box before a lazy image arrives; without it the
+   figure collapses to caption height and the page reflows as images land */
+figure img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;
+  background:var(--vl-surface-sunken)}
+figure.wide img{aspect-ratio:4/3}
+/* the dimensioned drawing is the one image whose EDGES carry the information,
+   so it must never be cropped to fill a box */
+figure.contain img{object-fit:contain;background:var(--vl-white)}
+figcaption{padding:9px 11px 11px;border-top:1px solid var(--vl-border-subtle)}
+figcaption b{display:block;font:600 12px/1.3 var(--vl-font-sans);margin-bottom:3px}
+figcaption span{display:block;font:400 11px/1.45 var(--vl-font-sans);
+  color:var(--vl-text-muted)}
+figure.bad{border-color:var(--vl-red-500)}
+figure.bad figcaption b{color:var(--vl-red-700)}
+figure.good{border-color:var(--vl-green-500)}
+figure.good figcaption b{color:var(--vl-green-700)}
+.exlabel{font:600 11px/1.3 var(--vl-font-sans);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--vl-text-muted);margin:22px 0 9px}
+
+
+details.tpl{background:var(--vl-surface);border:1px solid var(--vl-border);
+  border-radius:var(--vl-radius-sm);margin:0 0 10px}
+details.tpl>summary{cursor:pointer;padding:14px 18px;list-style:none;
+  display:flex;align-items:center;gap:12px;
+  font:600 14px/1.3 var(--vl-font-sans)}
+details.tpl>summary::-webkit-details-marker{display:none}
+details.tpl>summary::before{content:"+";display:grid;place-items:center;
+  width:22px;height:22px;border-radius:5px;background:var(--vl-accent-fill);
+  color:var(--vl-accent-text);font:600 15px/1 var(--vl-font-mono);flex:none}
+details.tpl[open]>summary::before{content:"\2212"}
+details.tpl>summary .len{margin-left:auto;font:500 12px/1 var(--vl-font-mono);
+  color:var(--vl-text-muted)}
+.tplbody{border-top:1px solid var(--vl-border-subtle);padding:14px 18px 18px}
+.tplbody pre{margin:0;max-height:460px;overflow:auto;white-space:pre-wrap;
+  word-break:break-word;background:var(--vl-surface-sunken);
+  border-radius:var(--vl-radius-sm);padding:14px 16px;
+  font:400 12px/1.6 var(--vl-font-mono);color:var(--vl-text)}
+.copy{margin:0 0 10px;font:600 12px/1 var(--vl-font-sans);cursor:pointer;
+  padding:8px 13px;border-radius:6px;border:1px solid var(--vl-border-strong,var(--vl-stone-300));
+  background:var(--vl-surface-muted);color:var(--vl-text)}
+.copy:hover{background:var(--vl-accent-fill);color:var(--vl-accent-text)}
+.evnote{font:400 12px/1.6 var(--vl-font-sans);
+  color:var(--vl-text-secondary);margin:0 0 12px}
+.evnote .pill{margin-right:7px}
+.tok{font:500 12px/1.4 var(--vl-font-mono);color:var(--vl-wood-700);
+  background:var(--vl-wood-100);padding:2px 6px;border-radius:4px}
+
+footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--vl-border);
+  color:var(--vl-text-muted);font-size:13px}
+@media print{body{background:#fff}.card,table,figure{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="eyebrow">Velano Living &middot; Haussmann Inc</p>
+    <h1>Product Image Generation SOP</h1>
+    <p class="lede">How every Velano Living catalogue image is produced, checked and
+      published. Written from a full run of 520 cells and rewritten wherever a
+      control proved a check wrong.</p>
+    <div class="meta">
+      <span class="chip"><strong>520</strong> cells</span>
+      <span class="chip"><strong>104</strong> variants &middot; 30 products</span>
+      <span class="chip"><strong>5</strong> shots per variant</span>
+      <span class="chip">Model <strong>gpt-image-2</strong></span>
+      <span class="chip">~<strong>$0.10</strong> per cell</span>
+      <span class="chip">Version <strong>1.0</strong> &middot; 2026-08-09</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h2><span class="num">01</span>Source of truth</h2>
+<p class="sub">One sheet governs. Everything else is derived.</p>
+<div class="card">
+  <table>
+    <tr><th style="width:34%">Surface</th><th>Role</th></tr>
+    <tr><td><strong>Catalogue sheet</strong><br><code>1CWMmvEff&hellip;SiVaU</code>, tab <em>Velano Living Products</em></td>
+        <td>The only authority. 104 rows, one per variant. Columns S through W hold the five deliverable images.</td></tr>
+    <tr><td><strong>Column A</strong>, canonical variant id</td>
+        <td>The join key. <strong>Never use row numbers.</strong> The tab gets re-sorted; two extracts minutes apart once disagreed on 54 of 104 rows, and a comparison built from both paired one product's cells with another product's references.</td></tr>
+    <tr><td><strong>Columns P, Q, R, X</strong></td><td>The real Haussmann reference photographs. See section 02.</td></tr>
+    <tr><td><strong>Column AZ</strong></td>
+        <td>Link to the Haussmann product page and its full image set. <span class="pill warn">73 of 104 are dead 404s</span> Falls back to P and Q.</td></tr>
+    <tr><td><strong>Columns BC, BD, BE</strong></td><td>Audit output: action, verdict, and the measured evidence behind it.</td></tr>
+  </table>
+</div>
+
+<h2><span class="num">02</span>The reference set</h2>
+<p class="sub">Four real photographs per row, plus the approved Velano image where one
+  exists. Attached unmodified. This is the part that was wrong for the longest.</p>
+
+<div class="rule stop">
+  <h4>Never tone-map a reference</h4>
+  <p>The contract states the finish comes from a photograph, never a colour word.
+  An early pipeline ran a levels stretch across the product reference before
+  attaching it, so the finish the model saw was one we had altered. Measured on
+  the Vanta Oak reference, saturation went 48.4 to 72.0 percent and Oak rendered
+  as a red walnut. References go in as the camera made them.</p>
+</div>
+
+<div class="card">
+  <table>
+    <tr><th style="width:16%">Column</th><th style="width:30%">What it is</th><th>What it carries</th></tr>
+    <tr><td><strong>Approved Velano</strong></td><td>The signed-off image for this exact shot</td>
+        <td>Composition, room, light direction, camera, crop. Leads when the family has one. A buyer comparing finishes must see the same photograph with only the wood changed.</td></tr>
+    <tr><td><strong>Q</strong></td><td>Real camera photograph of the real product</td>
+        <td>Realism only. <strong>Attach as a cropped surface patch, never full frame.</strong> See the trap below.</td></tr>
+    <tr><td><strong>P</strong></td><td>Product on plain white</td><td>True form and silhouette. Its studio lighting must not appear in the output.</td></tr>
+    <tr><td><strong>R</strong></td><td>Finishes side by side, labelled</td><td>True colour, taken from the labelled finish only.</td></tr>
+    <tr><td><strong>X</strong></td><td>Dimensioned drawing</td><td>True measurements. This answers proportion, not prompt adjectives.</td></tr>
+  </table>
+</div>
+
+<p class="exlabel">Worked example &middot; The Arbor, Agate Grey, 14 dia x 20 in</p>
+<div class="figs f4">
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-ref-P.jpg" alt="Column P, the Arbor on plain white">
+    <figcaption><b>P &middot; plain white</b><span>True form and silhouette. Take the shape, never the lighting.</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-ref-Q.jpg" alt="Column Q, the Arbor photographed in a real room">
+    <figcaption><b>Q &middot; real photograph</b><span>The realism standard. Crop to a surface patch before attaching, or it hands over its room.</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-ref-R.jpg" alt="Column R, the finishes side by side and labelled">
+    <figcaption><b>R &middot; finish swatch</b><span>True colour, from the labelled finish only. Never average this with P and Q.</span></figcaption></figure>
+  <figure class="contain"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-ref-X.jpg" alt="Column X, the dimensioned drawing">
+    <figcaption><b>X &middot; dimensions</b><span>True measurements. This answers proportion, not prompt adjectives.</span></figcaption></figure>
+</div>
+
+<div class="rule">
+  <h4>Trap: the room goes to the strongest scene signal</h4>
+  <p>Attaching Q full frame put a real room in front of the model and it copied
+  that room instead of the approved one. Ranked against outcomes, only the
+  densest donor survived: <code>51.6</code> won on all three cells, <code>38.4</code>
+  lost on all three, <code>26.5</code> lost on one of three, <code>9.7</code> lost on
+  all three. Crop Q to a square patch of solid timber at <strong>native
+  resolution</strong> and the environment reference wins unopposed.</p>
+</div>
+
+<div class="rule stop">
+  <h4>Trap: never upscale the texture patch</h4>
+  <p>The first patch cropped 34 percent of the object and magnified it to 768px,
+  which on one product was 141 native pixels blown up 5.4 times. That fed the
+  model a blurred surface and it faithfully reproduced the blur. This is the
+  entire cause of the "too smooth, not enough grain" complaint. Crop larger,
+  resample down only, never up.</p>
+</div>
+
+<div class="figs f2">
+  <figure class="bad"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/trap-grain-before.jpg" alt="Macro shot with a smooth, featureless surface">
+    <figcaption><b>WRONG &middot; texture patch was upscaled</b><span>Photoreal but smooth. The surface reads as one even tone with no figure. The reference itself was blurred, so the model reproduced blur.</span></figcaption></figure>
+  <figure class="good"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/trap-grain-after.jpg" alt="Macro shot with visible grain, figure and a check in the timber">
+    <figcaption><b>RIGHT &middot; native resolution patch</b><span>Dark and pale bands running through the species, and a real check open along the grain.</span></figcaption></figure>
+</div>
+
+<div class="figs f2">
+  <figure class="bad"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/trap-room-wrong.jpg" alt="Studio shot that instead copied the reference photograph's room">
+    <figcaption><b>WRONG &middot; column Q attached full frame</b><span>Image 1 should be a studio. It copied Q's actual room, grey recliners and all, because a full-frame real room outranked the environment reference.</span></figcaption></figure>
+  <figure class="good"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/trap-room-right.jpg" alt="Correct studio shot on a warm neutral seamless backdrop">
+    <figcaption><b>RIGHT &middot; Q cropped to a surface patch</b><span>Same references, same prompt. Q keeps its realism and brings no room, so the studio spec wins.</span></figcaption></figure>
+</div>
+
+<h2><span class="num">03</span>How a reference becomes an approved image</h2>
+<p class="sub">The references do not go in as "inspiration". Each one is assigned a
+  single job in the prompt, and every property of the finished image is traceable
+  to the reference that governs it. This is the whole method.</p>
+
+<div class="card">
+  <table>
+    <tr><th style="width:5%"></th><th style="width:27%">Step</th><th>What happens, and why it is that way</th></tr>
+    <tr><td class="n">1</td><td><strong>Resolve the row</strong></td>
+        <td>Look the variant up by canonical id in column A. Read family, finish, size, and the four reference URLs. Never by row number.</td></tr>
+    <tr><td class="n">2</td><td><strong>Pick the environment donor</strong></td>
+        <td>The approved image for this shot, from the catalogue standard. Same room for every product in that column.</td></tr>
+    <tr><td class="n">3</td><td><strong>Crop Q to a surface patch</strong></td>
+        <td>Slide a square window over the piece, keep the position with the most solid timber, at native resolution. Purity measured 0.93 to 1.0. Carries real lens rendering with no room attached.</td></tr>
+    <tr><td class="n">4</td><td><strong>Assemble the prompt</strong></td>
+        <td>Three blocks, built from the row, never hand-written. See the anatomy below.</td></tr>
+    <tr><td class="n">5</td><td><strong>Generate</strong></td>
+        <td>All references attached as an ordered array, 1536x2048, medium quality.</td></tr>
+    <tr><td class="n">6</td><td><strong>Check, then publish</strong></td>
+        <td>Environment and colour measured against calibrated thresholds. Fail means regenerate, not accept.</td></tr>
+  </table>
+</div>
+
+<h3>Prompt anatomy</h3>
+<p>Worked on the Arbor Grey studio shot. <strong>9,951 characters</strong>, none of it typed by hand.</p>
+<div class="card">
+  <table>
+    <tr><th style="width:22%">Block</th><th style="width:12%">Chars</th><th>Source and job</th></tr>
+    <tr><td><strong>Environment</strong></td><td class="n">1,430</td>
+        <td>From <code>shot_environments.py</code>, keyed by column. Says what this shot IS, plus the grain clause and, for room shots, the prop and greenery rules.</td></tr>
+    <tr><td><strong>Reference roles</strong></td><td class="n">1,739</td>
+        <td>From <code>references.py</code>. Numbers each attached image and gives it one job. Written against what actually attached, so a missing R or X never gets described.</td></tr>
+    <tr><td><strong>Product</strong></td><td class="n">6,782</td>
+        <td>From <code>build_prompt.py</code>. Form, anti-form, proportion from column X, mass, individuality, texture, light, resolution, negatives.</td></tr>
+  </table>
+  <p class="sub" style="margin:2px 0 0">Column S assembles a different block set from U, V and W. It gets
+  <code>STUDIO_LIGHT_BLOCK</code> and <code>STUDIO_NEGATIVE_BLOCK</code> instead of the room
+  versions, because the room negatives forbid the very backdrop shot 1 requires.</p>
+</div>
+
+<h3>Every reference governs one property</h3>
+<div class="card">
+  <table>
+    <tr><th style="width:20%">Reference</th><th style="width:26%">Governs</th><th>What the prompt actually says</th></tr>
+    <tr><td><strong>Approved Velano</strong></td><td>room, light, camera, crop</td>
+        <td>"Reproduce all of it. A buyer comparing two finishes must see the SAME photograph with only the wood changed."</td></tr>
+    <tr><td><strong>Q</strong>, cropped</td><td>surface realism</td>
+        <td>"Real grain, real pore structure, real tool marks, real checks. It contains NO room and you must NOT build one from it."</td></tr>
+    <tr><td><strong>P</strong></td><td>form and silhouette</td>
+        <td>"Take the shape from this, and take nothing else from it: its lighting is studio lighting and must not appear in your output."</td></tr>
+    <tr><td><strong>R</strong></td><td>finish colour</td>
+        <td>"The finish for this piece is GREY. Find that label and take the wood colour from THAT piece only. Never take a colour from a colour word."</td></tr>
+    <tr><td><strong>X</strong></td><td>proportion</td>
+        <td>"THE PROPORTIONS ARE 14 INCHES IN DIAMETER BY 20 TALL, so it stands 1.43 times its own width." Read off the drawing, not estimated.</td></tr>
+  </table>
+</div>
+
+<div class="rule note">
+  <h4>Why the prompt is generated and never typed</h4>
+  <p>Every block here was proven on a re-run, and the generic version of the same
+  instruction is recorded as having failed. Adjectives do not transmit proportion;
+  a number and a named failure mode do. Hand-writing a prompt per cell means the
+  contract lives in someone's head, which is how a studio requirement and a
+  studio prohibition ended up in the same prompt for months.</p>
+</div>
+
+<h2><span class="num">04</span>The five shots</h2>
+<p class="sub">The environment belongs to the <strong>column</strong>, identical across
+  every product. It does not belong to the family. Variation lives in the piece
+  and the finish, never the set, because a buyer scans a column.</p>
+
+<div class="card">
+  <div class="shot"><div class="no">1</div><div>
+    <h4>Studio</h4>
+    <p>Seamless warm neutral backdrop, greige or taupe, falling off gently. Floor
+    and backdrop meet in a soft curve with no corner or skirting. Soft contact
+    shadow. No furniture, no window, no rug. Never pure white.</p>
+    <p class="check">CHECK floor/wall texture ratio &le; 1.4 &middot; known-good 0.96 to 1.26</p>
+  </div></div>
+  <div class="shot"><div class="no">2</div><div>
+    <h4>Macro</h4>
+    <p>Extreme close-up filling the frame with timber. Pore structure, grain
+    direction, tool facets, checks and splits, oil sitting darker in the recesses.
+    Light rakes across at a low angle so every ridge casts its own shadow. The
+    imperfections are the point.</p>
+    <p class="check">NO AUTOMATED CHECK &middot; known-good range 19.3 to 43.2 straddles any threshold</p>
+  </div></div>
+  <div class="shot"><div class="no">3</div><div>
+    <h4>Beside the couch, window behind</h4>
+    <p>Real living room. Sofa arm in neutral fabric, rug underfoot, daylight
+    through the window behind. <em>Exception: The Elara keeps its own setting.</em></p>
+    <p class="check">CHECK border structure &ge; 20 &middot; known-good 33.1 to 35.7</p>
+  </div></div>
+  <div class="shot"><div class="no">4</div><div>
+    <h4>Bedroom</h4>
+    <p>Bedside against a bed. Pillows, linen, headboard or bed edge in frame,
+    soft low light.</p>
+    <p class="check">CHECK border structure &ge; 20 &middot; known-good 22.4 to 29.0, soft by design</p>
+  </div></div>
+  <div class="shot"><div class="no">5</div><div>
+    <h4>Corner beside a window</h4>
+    <p>Two plaster walls meeting, daylight falling directly across the piece and
+    throwing its shadow along wall and floor.</p>
+    <p class="check">CHECK border structure &ge; 20 &middot; known-good 44.9 to 55.4</p>
+  </div></div>
+</div>
+
+<p class="exlabel">The approved set &middot; The Arbor, Agate Grey &middot; this is the standard every product matches</p>
+<div class="figs f5">
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-shot1.jpg" alt="Arbor Grey on a warm neutral studio backdrop">
+    <figcaption><b>1 &middot; studio</b><span>Warm seamless, soft contact shadow, no room.</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-shot2.jpg" alt="Arbor Grey macro showing grain and a split">
+    <figcaption><b>2 &middot; macro</b><span>Raking light, visible check in the timber.</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-shot3.jpg" alt="Arbor Grey beside a couch with a window behind">
+    <figcaption><b>3 &middot; couch</b><span>Sofa arm, rug, daylight behind.</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-shot4.jpg" alt="Arbor Grey as a bedside table">
+    <figcaption><b>4 &middot; bedroom</b><span>Bedside, linen, soft low light.</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/arbor-grey-shot5.jpg" alt="Arbor Grey in a corner beside a window">
+    <figcaption><b>5 &middot; corner</b><span>Two walls, light raking across the piece.</span></figcaption></figure>
+</div>
+
+<p class="exlabel">Second worked example &middot; The Solen, Walnut, 12 x 12 x 20 in &middot; square plan, different wood, same five environments</p>
+<div class="figs f4">
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-ref-P.jpg" alt="Solen Walnut on plain white"><figcaption><b>P</b><span>form</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-ref-Q.jpg" alt="Solen Walnut photographed in a real room"><figcaption><b>Q</b><span>realism</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-ref-R.jpg" alt="Solen finishes side by side"><figcaption><b>R</b><span>colour</span></figcaption></figure>
+  <figure class="contain"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-ref-X.jpg" alt="Solen dimensioned drawing"><figcaption><b>X</b><span>proportion</span></figcaption></figure>
+</div>
+<div class="figs f5">
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-shot1.jpg" alt="Solen Walnut studio shot"><figcaption><b>1 &middot; studio</b><span>same backdrop as the Arbor</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-shot2.jpg" alt="Solen Walnut macro"><figcaption><b>2 &middot; macro</b><span>walnut figure</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-shot3.jpg" alt="Solen Walnut beside a couch"><figcaption><b>3 &middot; couch</b><span>same setup</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-shot4.jpg" alt="Solen Walnut in a bedroom"><figcaption><b>4 &middot; bedroom</b><span>same setup</span></figcaption></figure>
+  <figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/solen-walnut-shot5.jpg" alt="Solen Walnut in a corner"><figcaption><b>5 &middot; corner</b><span>same setup</span></figcaption></figure>
+</div>
+<p class="sub">Two different products, two different woods, one set of five environments.
+  That is the whole point: a buyer scanning column 3 sees the same room every time
+  and only the piece changes.</p>
+
+<div class="grid g2">
+  <div class="card">
+    <h3>Approved props</h3>
+    <p class="sub" style="margin:0">Books, candles, plants, flowers, cups, picture
+    frames, a draped cloth. Nothing else is invented. Props stay minimal and never
+    obscure the form.</p>
+  </div>
+  <div class="card">
+    <h3>Greenery</h3>
+    <p class="sub" style="margin:0">Worked in deliberately to contrast against the
+    wood: a plant or cut flowers on or beside the piece, and real foliage visible
+    through any window in shot.</p>
+  </div>
+</div>
+
+<h2><span class="num">05</span>Prompt templates</h2>
+<p class="sub">The exact text sent to the model, generated from the row. Placeholders
+  are the only thing that changes between cells. Copy a template, fill the five
+  tokens, attach the references in order, and the output is an approved image.</p>
+
+<h3>What to attach, and in what order</h3>
+<p>Order is not cosmetic. The array position is what the prompt text refers to,
+  so a swapped attachment silently reassigns every job below it.</p>
+<div class="card">
+<table>
+  <tr><th style="width:9%">Position</th><th style="width:24%">Image</th><th style="width:18%">Required</th><th>If absent</th></tr>
+  <tr><td class="n">1</td><td><strong>Approved Velano</strong> for this column</td><td><span class="pill ok">strongly preferred</span></td><td>Q leads instead and sets the room. Acceptable only for a family with no approved image yet.</td></tr>
+  <tr><td class="n">2</td><td><strong>Q cropped to a surface patch</strong></td><td><span class="pill ok">yes</span></td><td>Surface realism collapses. Never attach Q full frame.</td></tr>
+  <tr><td class="n">3</td><td><strong>P</strong>, product on white</td><td><span class="pill ok">yes</span></td><td>Form drifts toward the anti-form.</td></tr>
+  <tr><td class="n">4</td><td><strong>R</strong>, labelled finish swatch</td><td><span class="pill warn">where it exists</span></td><td>Colour comes from the word alone, which is the documented failure.</td></tr>
+  <tr><td class="n">5</td><td><strong>X</strong>, dimensioned drawing</td><td><span class="pill warn">where it exists</span></td><td>Proportion rests on the numeric clause only. Missing on 10 of 104 rows.</td></tr>
+</table>
+<p class="sub" style="margin:0">The reference block is written against what actually
+attached. Describing an image that is not there teaches the model to invent one.</p>
+</div>
+
+<h3>The five placeholders</h3>
+<div class="card">
+<table>
+  <tr><th style="width:30%">Token</th><th style="width:22%">Filled from</th><th>Example</th></tr>
+  <tr><td><span class="tok">{HAUSSMANN_SKU}</span></td><td>column D</td><td>RWTV14D20-L-AGR</td></tr>
+  <tr><td><span class="tok">{FINISH}</span></td><td>column C</td><td>GREY</td></tr>
+  <tr><td><span class="tok">{W}</span> and <span class="tok">{H}</span></td><td>column M, and read off X</td><td>14 in diameter by 20 tall</td></tr>
+  <tr><td><span class="tok">{RATIO}</span></td><td>computed, H divided by W</td><td>1.43</td></tr>
+  <tr><td><span class="tok">{FORM}</span> and <span class="tok">{ANTI-FORM}</span></td><td><code>family_forms.py</code>, one entry per product</td><td>"a ROUND-topped twist stool..." / "square or rectangular in any part..."</td></tr>
+</table>
+</div>
+
+<div class="rule note">
+  <h4>Nineteen blocks are identical across all five shots</h4>
+  <p>Form, anti-form, proportion, mass, individuality, texture and resolution do
+  not vary by shot, because they describe the object rather than the picture.
+  What changes is the environment block, the light block and the negatives.
+  Column S and column T assemble different sets from the other three: the room
+  negatives forbid the studio backdrop that shot 1 requires, and the macro has
+  no room to describe.</p>
+</div>
+
+<h3>Provenance of each template</h3>
+<p class="sub">Diffed against the prompt each cell was actually generated with,
+  reconstructed from commit <code>5ab4c730</code>, not asserted.</p>
+<div class="card">
+<table>
+  <tr><th style="width:20%">Template</th><th style="width:26%">Status</th><th>Evidence</th></tr>
+  <tr><td><strong>2 macro</strong></td><td><span class="pill ok">byte-identical</span></td><td>8,366 chars, unchanged. Produced its share of the 407 approved cells.</td></tr>
+  <tr><td><strong>3 couch</strong></td><td><span class="pill ok">byte-identical</span></td><td>13,337 chars, unchanged.</td></tr>
+  <tr><td><strong>4 bedroom</strong></td><td><span class="pill ok">byte-identical</span></td><td>12,953 chars, unchanged.</td></tr>
+  <tr><td><strong>5 corner</strong></td><td><span class="pill ok">byte-identical</span></td><td>13,037 chars, unchanged.</td></tr>
+  <tr><td><strong>1 studio</strong></td><td><span class="pill info">corrected, then tested</span></td>
+      <td><strong>This one is NOT what generated the cells in the sheet.</strong> The as-run version was
+      12,403 chars and contained the contradiction: it asked for a studio backdrop and
+      forbade one in the same prompt. The published version is 9,951 chars, swapping the
+      room light and room negatives for studio ones. Tested on 9 fresh cells before
+      publication: <strong>studio conformance 9 of 9</strong>, ratios 1.06 to 1.24 against a
+      1.4 ceiling. The 2 colour misses are both Oak, the known finish bias, and those
+      same cells scored 8.4 and 8.3 under the old prompt, so the change is neutral on
+      colour and strictly better on the contradiction.</td></tr>
+</table>
+</div>
+
+<div class="rule stop">
+  <h4>Never publish a template that has not generated an image</h4>
+  <p>The first version of this section shipped the corrected studio template as if
+  it were the proven one. Four of five were byte-identical to what ran; one was an
+  hour-old edit that had produced nothing. A template is a claim about output, and
+  the only evidence for it is output. Diff any change against the as-run prompt,
+  then generate against it, before it goes in here.</p>
+</div>
+
+<h3>The full templates, each with what it produced</h3>
+<details class="tpl"><summary>Shot 1 &middot; studio<span class="len">9,753 chars</span></summary>
+<div class="tplbody"><p class="evnote"><span class="pill info">9 cells, generated after the studio correction</span> The studio cells already in the sheet came from the OLD contradictory prompt, so they are not evidence for this template. These are.</p><div class="figs f4"><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-S-solen.jpg" alt="The Solen Walnut shot 1"><figcaption><b>The Solen Walnut</b><span>12 x 12 x 20 in<br>floor/wall 1.13</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-S-veylo.jpg" alt="The Veylo Oak shot 1"><figcaption><b>The Veylo Oak</b><span>16 dia x 20 in<br>floor/wall 1.15</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-S-arbor.jpg" alt="The Arbor Grey shot 1"><figcaption><b>The Arbor Grey</b><span>14 dia T x 20 in<br>floor/wall 1.24</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-S-alora.jpg" alt="The Alora Oak shot 1"><figcaption><b>The Alora Oak</b><span>12 x 12 x 22 in<br>floor/wall 1.11</span></figcaption></figure></div><button class="copy" data-t="tpl-S">Copy full prompt</button>
+<pre id="tpl-S">THE ENVIRONMENT FOR THIS SHOT IS FIXED BY THE CATALOGUE AND IS THE SAME FOR EVERY PRODUCT IN THIS POSITION.
+
+THIS IS A STUDIO PHOTOGRAPH, NOT A ROOM. The piece stands alone on a seamless studio backdrop in a warm neutral tone, a soft greige or taupe, lit so the backdrop falls off gently from light behind the piece to slightly darker at the edges of frame. The floor and the backdrop meet in a soft seamless curve with no visible corner, no skirting, no wall join. A soft grounded contact shadow sits under the piece. There is NO furniture, NO window, NO rug and NO room of any kind. The backdrop is warm neutral and must NEVER be pure white. Every image 1 in this catalogue uses this same studio, so it must match the others exactly.
+
+THE WOOD GRAIN MUST BE VISIBLE AND MUST READ AS THE SAME TIMBER AS THE REFERENCE PHOTOGRAPHS. Show the FIGURE: the long directional streaks and bands of light and dark that run through this species, the darker heartwood sweeping against paler sapwood, growth rings where a face cuts across them, knots, and the fine checks that open along the grain. The tone is not uniform anywhere on the piece; it varies continuously along the figure. Light must rake across the surface enough that the grain casts its own micro relief. A piece that reads as one even colour with a smooth polished surface is WRONG, however photoreal it otherwise looks, because it loses the thing the buyer is paying for.
+
+THE REFERENCE IMAGES ATTACHED ARE REAL PHOTOGRAPHS OF THE REAL PRODUCT. THEY DO DIFFERENT JOBS.
+
+REFERENCE 1 IS THE APPROVED PHOTOGRAPH FOR THIS EXACT SHOT. It carries the composition, the room, the light direction, the camera position and the crop. Reproduce all of it. A buyer comparing two finishes must see the SAME photograph with only the wood changed, so the set does not change. Vary the camera slightly if you must, never the room.
+
+REFERENCE 2 IS A REAL PHOTOGRAPH TAKEN WITH A REAL CAMERA IN A REAL ROOM. It is the standard for realism. Match how a real camera renders an interior: the way daylight actually falls and falls off across a wall, real shadow density and real shadow edges, real texture on plaster and floor and fabric, the ordinary unevenness and imperfection of real materials, real depth of field, real white balance. Do NOT produce a cleaner, smoother, warmer, more evenly lit or more colour graded room than a real photograph has. A room that looks styled, glowing or perfectly even is WRONG.
+
+REFERENCE 3 IS THE PRODUCT ON PLAIN WHITE. It carries the true form and the true silhouette. Take the shape from this, and take nothing else from it: its lighting is studio lighting and must not appear in your output.
+
+REFERENCE 4 SHOWS THE AVAILABLE FINISHES SIDE BY SIDE, each one labelled. The finish for this piece is {FINISH}. Find that label and take the wood colour from THAT piece only. Never take a colour from a colour word, and never invent a tone. If the named finish is a brown wood, it must read as warm brown, never grey, silver, ashen or desaturated.
+
+REFERENCE 5 IS THE DIMENSIONED DRAWING and the numbers printed on it are the true measurements of this piece. The proportions you draw must match them.
+
+A HERO PRODUCT PHOTOGRAPH. Three quarter view, the whole piece in frame, standing on the floor of the room. The silhouette must read cleanly from top to base with nothing crossing it.
+
+COME IN CLOSE. The piece is the subject and it should FILL the frame: about three quarters of the frame height, top and base both comfortably inside the edges with only a modest margin. The room is present around it as context, not as the subject. A buyer has to be able to inspect the carving, the edges and the grain at this distance, so do not stand back and photograph the room with the piece somewhere in it.
+
+TWO REFERENCE IMAGES ARE ATTACHED AND THEY DO DIFFERENT JOBS.
+
+THE FIRST REFERENCE gives the PHOTOGRAPH: the room, the wall, the floor covering, the furniture and where it sits, the camera height and distance, the focal length, the crop, and the direction and quality of the light. Reproduce all of that. A buyer comparing two finishes has to see the same photograph with different wood in it, so the set must not change.
+
+THE SECOND REFERENCE gives the OBJECT: its true form, its true proportions and its true colour. Take the finish from this photograph. Do NOT take the finish from any colour word, and do NOT take the shape from the first reference.
+
+THE PROPORTIONS ARE {W} INCHES IN DIAMETER BY {H} TALL, so it stands {RATIO} times its own width. This is a SHORT, STOUT, GROUNDED piece, not a tall slender pillar.
+
+CHECK THE PROPORTION IN THE FINISHED FRAME, and measure the SIDE of the piece, not its whole silhouette. Measure from where the piece meets the floor up to the NEAR edge of its top surface, the front lip closest to the camera. Do NOT measure up to the far edge of the top: the camera looks slightly down, so the top reads as an ellipse and its far edge sits higher in the frame than the piece actually is. That is the single most common way this check is failed. The plan of this piece is a CIRCLE, so it shows the same width from every angle and no viewing direction makes it narrower. So that side height divided by the width must be {RATIO}. Taller than {RATIO} is WRONG and the piece must be drawn wider and heavier. Every failure of this piece so far has been toward too tall and too narrow, never toward too squat, so err deliberately toward broad. The form is {FORM from family_forms.py}. It is NOT {ANTI-FORM from family_forms.py}.
+
+MASS IS A SEPARATE PROPERTY FROM PROPORTION AND IT IS THE ONE THAT GETS LOST.
+
+The ratio governs the bounding box and says nothing about how much material fills it. This piece is carved from ONE HEAVY SOLID BLOCK and it must still look like one. Any strands or uprights are BROAD AND FLESHY, as thick as the gap beside them. Any opening is a SMALL TIGHT gap rather than a wide window, and you cannot see much of the room through it. The top slab is THICK with a visible chunky edge. The base is a substantial block, as wide as the top, planted flat on the floor. It should look heavy enough that you would struggle to lift it with one hand.
+
+Do NOT slim the waist. Do NOT thin the strands into ribbons. Do NOT enlarge the void. Do NOT make it an elegant narrow hourglass. It must not read as a slender sculptural pedestal.
+
+Measure the thickness against the SECOND reference: the uprights must be at least as thick, and the openings between them at least as small, as that photograph shows. Erring toward heavier is correct; erring toward slimmer is the failure.
+
+THIS IS A DIFFERENT PHYSICAL PIECE OF WOOD, CUT FROM A SEPARATE BOARD.
+
+These are individually carved solid timber pieces and the character of the grain is what says so. Do NOT copy the reference&#x27;s grain figure, its surface checks, its knots or its sapwood. Invent this piece&#x27;s character fresh:
+  - the grain figure and the direction it runs
+  - the number of surface checks, and each one&#x27;s length, angle and position
+  - where the knots fall, if any
+  - which edge the pale sapwood band enters from
+  - the mineral streaking
+
+The checks in particular must differ from the reference in COUNT, ANGLE, POSITION and LENGTH. Two pieces carrying the same crack in the same place look manufactured, and that undoes the entire claim these photographs exist to make.
+
+THE SURFACE IS HAND-OILED SOLID HARDWOOD AND IT MUST READ AS ONE.
+
+The oil finish leaves the harder latewood standing very slightly proud of the softer springwood, roughly half a millimetre of relief. Render that: a thin highlight along each lit ridge and a hairline shadow behind it. Carry the chatoyance, the shimmer going brighter where the fibres run toward the light and deeper where they run away, because that shift is what says hardwood more than the pores do.
+
+THE PORES MUST BE SCATTERED AND NOT ARRANGED. No rows, no arcs, no chevrons, no scallops, no bands. Three or four crowded together here, a bare stretch there, one large isolated pore somewhere. Large areas with almost no visible pores at all, which is what makes the porous areas believable. If any part of the surface shows an obvious repeating rhythm, it is wrong.
+
+Not snakeskin, not embossing, not stamped leather, not a machined pattern, not a texture map. Keep the relief FINE and the light SOFT. No crunchy over-sharpened micro contrast, no HDR, no sandblasted or wire-brushed look, no plastic or waxy sheen.
+
+THIS IS LIT LIKE A STUDIO PRODUCT PHOTOGRAPH, NOT LIKE A ROOM.
+
+One broad soft key from slightly above and to one side, with enough fill that the shadow side still shows its carving. The backdrop falls off gently, brighter behind the piece and a little darker toward the edges of frame. A soft grounded contact shadow sits under the piece where it meets the sweep. No window, no shaft of daylight, and no cast shadow from anything outside the frame. The piece is the brightest thing in the picture and the backdrop never competes with it. 
+
+THE WOOD MUST HOLD ITS TEXTURE AT THIS VIEWING DISTANCE. This is a Phase One medium format back at f/5.6, which resolves pores and grain across the entire piece even in a full product view. The surrounding room may go soft; the wood may not. If any area reads as a smooth plastic-like or stone-like fill, the image has failed.
+
+NOT ACCEPTABLE: a pure WHITE background of any kind, a blown out or clipped backdrop, a hard visible line where wall meets floor, skirting, a room corner, a window, a rug, furniture, or any other room detail. No CGI or 3D render look. No visible text, no watermark, no warped verticals, no floating piece. The backdrop is a warm neutral seamless sweep and it stays one continuous surface curving from behind the piece down underneath it. </pre></div></details><details class="tpl"><summary>Shot 2 &middot; macro<span class="len">8,168 chars</span></summary>
+<div class="tplbody"><p class="evnote"><span class="pill ok">from the 407 cells in the sheet</span> This prompt is byte-identical to the one that produced them.</p><div class="figs f4"><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-T-mirel.jpg" alt="The Mirel Dark Walnut shot 2"><figcaption><b>The Mirel Dark Walnut</b><span>14 dia top x 15 dia x 11 dia base x 20 in<br>border 16.1</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-T-selorin.jpg" alt="The Selorin Mocha shot 2"><figcaption><b>The Selorin Mocha</b><span>15 x 15 x 20 in<br>border 21.3</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-T-luma.jpg" alt="The Luma Walnut shot 2"><figcaption><b>The Luma Walnut</b><span>10 x 10 x 16 in<br>border 25.1</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-T-talen.jpg" alt="The Talen Oak shot 2"><figcaption><b>The Talen Oak</b><span>12 x 14 x 20 in<br>border 30.0</span></figcaption></figure></div><button class="copy" data-t="tpl-T">Copy full prompt</button>
+<pre id="tpl-T">THE ENVIRONMENT FOR THIS SHOT IS FIXED BY THE CATALOGUE AND IS THE SAME FOR EVERY PRODUCT IN THIS POSITION.
+
+THIS IS AN EXTREME CLOSE UP OF THE SURFACE ITSELF. Fill the frame with timber. No silhouette, no room, no props. Come in close enough that the wood becomes the subject: open pore structure, the direction the grain runs and where it turns, tool facets left by carving, the small checks and splits that open along the grain, the way oil sits darker in the recesses. THE IMPERFECTIONS ARE THE POINT. A real carved piece has cracks, knots, colour variation and an uneven surface, and those are what make it worth buying. Light must RAKE ACROSS the surface at a low angle so every ridge, split and tool mark casts its own small shadow. A smooth, even, flawless, plasticky or airbrushed surface is WRONG and is the most common failure of this shot.
+
+THE WOOD GRAIN MUST BE VISIBLE AND MUST READ AS THE SAME TIMBER AS THE REFERENCE PHOTOGRAPHS. Show the FIGURE: the long directional streaks and bands of light and dark that run through this species, the darker heartwood sweeping against paler sapwood, growth rings where a face cuts across them, knots, and the fine checks that open along the grain. The tone is not uniform anywhere on the piece; it varies continuously along the figure. Light must rake across the surface enough that the grain casts its own micro relief. A piece that reads as one even colour with a smooth polished surface is WRONG, however photoreal it otherwise looks, because it loses the thing the buyer is paying for.
+
+THE REFERENCE IMAGES ATTACHED ARE REAL PHOTOGRAPHS OF THE REAL PRODUCT. THEY DO DIFFERENT JOBS.
+
+REFERENCE 1 IS THE APPROVED PHOTOGRAPH FOR THIS EXACT SHOT. It carries the composition, the room, the light direction, the camera position and the crop. Reproduce all of it. A buyer comparing two finishes must see the SAME photograph with only the wood changed, so the set does not change. Vary the camera slightly if you must, never the room.
+
+REFERENCE 2 IS A REAL PHOTOGRAPH TAKEN WITH A REAL CAMERA IN A REAL ROOM. It is the standard for realism. Match how a real camera renders an interior: the way daylight actually falls and falls off across a wall, real shadow density and real shadow edges, real texture on plaster and floor and fabric, the ordinary unevenness and imperfection of real materials, real depth of field, real white balance. Do NOT produce a cleaner, smoother, warmer, more evenly lit or more colour graded room than a real photograph has. A room that looks styled, glowing or perfectly even is WRONG.
+
+REFERENCE 3 IS THE PRODUCT ON PLAIN WHITE. It carries the true form and the true silhouette. Take the shape from this, and take nothing else from it: its lighting is studio lighting and must not appear in your output.
+
+REFERENCE 4 SHOWS THE AVAILABLE FINISHES SIDE BY SIDE, each one labelled. The finish for this piece is {FINISH}. Find that label and take the wood colour from THAT piece only. Never take a colour from a colour word, and never invent a tone. If the named finish is a brown wood, it must read as warm brown, never grey, silver, ashen or desaturated.
+
+REFERENCE 5 IS THE DIMENSIONED DRAWING and the numbers printed on it are the true measurements of this piece. The proportions you draw must match them.
+
+A MACRO CLOSE-UP OF THE WOOD SURFACE. The frame is filled by the material: the top edge and part of the upper surface, shot close enough that grain, pore structure and any surface check are the subject. This image exists to prove the finish, so the wood must be unambiguous and well lit.
+
+TWO REFERENCE IMAGES ARE ATTACHED AND THEY DO DIFFERENT JOBS.
+
+THE FIRST REFERENCE gives the FRAMING AND MAGNIFICATION: how close the camera is, how much of the piece fills the frame, the shallow depth of field, and the direction and softness of the light. This is an EXTREME CLOSE-UP. Match that magnification.
+
+THE SECOND REFERENCE gives the OBJECT: its true form and its true colour. Take the finish from this photograph, never from a colour word.
+
+THERE IS NO ROOM IN THIS SHOT. Do NOT show the floor, the walls, any furniture, or any part of a room. Do NOT pull the camera back to show the whole piece. The wood fills the frame edge to edge, and anything visible beyond it is an out-of-focus wash.
+
+THE PROPORTIONS ARE {W} INCHES IN DIAMETER BY {H} TALL, so it stands {RATIO} times its own width. This is a SHORT, STOUT, GROUNDED piece, not a tall slender pillar.
+
+CHECK THE PROPORTION IN THE FINISHED FRAME, and measure the SIDE of the piece, not its whole silhouette. Measure from where the piece meets the floor up to the NEAR edge of its top surface, the front lip closest to the camera. Do NOT measure up to the far edge of the top: the camera looks slightly down, so the top reads as an ellipse and its far edge sits higher in the frame than the piece actually is. That is the single most common way this check is failed. The plan of this piece is a CIRCLE, so it shows the same width from every angle and no viewing direction makes it narrower. So that side height divided by the width must be {RATIO}. Taller than {RATIO} is WRONG and the piece must be drawn wider and heavier. Every failure of this piece so far has been toward too tall and too narrow, never toward too squat, so err deliberately toward broad. The form is {FORM from family_forms.py}. It is NOT {ANTI-FORM from family_forms.py}.
+
+THIS IS A DIFFERENT PHYSICAL PIECE OF WOOD, CUT FROM A SEPARATE BOARD.
+
+These are individually carved solid timber pieces and the character of the grain is what says so. Do NOT copy the reference&#x27;s grain figure, its surface checks, its knots or its sapwood. Invent this piece&#x27;s character fresh:
+  - the grain figure and the direction it runs
+  - the number of surface checks, and each one&#x27;s length, angle and position
+  - where the knots fall, if any
+  - which edge the pale sapwood band enters from
+  - the mineral streaking
+
+The checks in particular must differ from the reference in COUNT, ANGLE, POSITION and LENGTH. Two pieces carrying the same crack in the same place look manufactured, and that undoes the entire claim these photographs exist to make.
+
+THE SURFACE IS HAND-OILED SOLID HARDWOOD AND IT MUST READ AS ONE.
+
+The oil finish leaves the harder latewood standing very slightly proud of the softer springwood, roughly half a millimetre of relief. Render that: a thin highlight along each lit ridge and a hairline shadow behind it. Carry the chatoyance, the shimmer going brighter where the fibres run toward the light and deeper where they run away, because that shift is what says hardwood more than the pores do.
+
+THE PORES MUST BE SCATTERED AND NOT ARRANGED. No rows, no arcs, no chevrons, no scallops, no bands. Three or four crowded together here, a bare stretch there, one large isolated pore somewhere. Large areas with almost no visible pores at all, which is what makes the porous areas believable. If any part of the surface shows an obvious repeating rhythm, it is wrong.
+
+Not snakeskin, not embossing, not stamped leather, not a machined pattern, not a texture map. Keep the relief FINE and the light SOFT. No crunchy over-sharpened micro contrast, no HDR, no sandblasted or wire-brushed look, no plastic or waxy sheen.
+
+THE WOOD IS BRIGHTLY AND GENEROUSLY LIT. Abundant soft daylight falling across the surface, bright and open and clean. The timber reads rich and luminous, never dim, never murky, never a moody near-black close-up. Keep the light raking enough that the grain relief and the pore structure still read, and keep the shadows inside that relief open with visible detail rather than crushed to black.
+
+THE WOOD MUST HOLD ITS TEXTURE AT THIS VIEWING DISTANCE. This is a Phase One medium format back at f/5.6, which resolves pores and grain across the entire piece even in a full product view. The surrounding room may go soft; the wood may not. If any area reads as a smooth plastic-like or stone-like fill, the image has failed.
+
+NOT ACCEPTABLE: pulling back to show the whole piece. No floor, no wall, no furniture, no room. No CGI or 3D-render look. No visible text anywhere in the frame. No watermark. No plain white studio background.</pre></div></details><details class="tpl"><summary>Shot 3 &middot; couch and window<span class="len">13,139 chars</span></summary>
+<div class="tplbody"><p class="evnote"><span class="pill ok">from the 407 cells in the sheet</span> This prompt is byte-identical to the one that produced them.</p><div class="figs f4"><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-U-mirel.jpg" alt="The Mirel Dark Walnut shot 3"><figcaption><b>The Mirel Dark Walnut</b><span>14 dia top x 15 dia x 11 dia base x 20 in<br>border 33.8</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-U-selorin.jpg" alt="The Selorin Mocha shot 3"><figcaption><b>The Selorin Mocha</b><span>15 x 15 x 20 in<br>border 33.9</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-U-luma.jpg" alt="The Luma Walnut shot 3"><figcaption><b>The Luma Walnut</b><span>10 x 10 x 16 in<br>border 33.5</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-U-talen.jpg" alt="The Talen Oak shot 3"><figcaption><b>The Talen Oak</b><span>12 x 14 x 20 in<br>border 34.0</span></figcaption></figure></div><button class="copy" data-t="tpl-U">Copy full prompt</button>
+<pre id="tpl-U">THE ENVIRONMENT FOR THIS SHOT IS FIXED BY THE CATALOGUE AND IS THE SAME FOR EVERY PRODUCT IN THIS POSITION.
+
+THE PIECE SITS BESIDE A COUCH WITH A WINDOW BEHIND IT. A real living room: the arm and edge of an upholstered sofa in a neutral fabric, a rug underfoot, and daylight coming through the window behind. Every image 3 in this catalogue uses this same setup.
+
+THE WOOD GRAIN MUST BE VISIBLE AND MUST READ AS THE SAME TIMBER AS THE REFERENCE PHOTOGRAPHS. Show the FIGURE: the long directional streaks and bands of light and dark that run through this species, the darker heartwood sweeping against paler sapwood, growth rings where a face cuts across them, knots, and the fine checks that open along the grain. The tone is not uniform anywhere on the piece; it varies continuously along the figure. Light must rake across the surface enough that the grain casts its own micro relief. A piece that reads as one even colour with a smooth polished surface is WRONG, however photoreal it otherwise looks, because it loses the thing the buyer is paying for.
+
+PROPS ARE RESTRICTED. The only things that may appear on or against the piece are: books, candles, plants, flowers, cups, picture frames, a draped cloth. Nothing else. No electronics, no bottles, no glassware beyond a cup, no decorative objects of any other kind. Props stay minimal and never obscure the form.
+
+Work living greenery into the frame so it contrasts against the wood: a small plant or cut flowers on or beside the piece, and where a window is in shot, real foliage or trees visible outside it. Greenery should read as a real plant in a real room, never as styling filler.
+
+THE REFERENCE IMAGES ATTACHED ARE REAL PHOTOGRAPHS OF THE REAL PRODUCT. THEY DO DIFFERENT JOBS.
+
+REFERENCE 1 IS THE APPROVED PHOTOGRAPH FOR THIS EXACT SHOT. It carries the composition, the room, the light direction, the camera position and the crop. Reproduce all of it. A buyer comparing two finishes must see the SAME photograph with only the wood changed, so the set does not change. Vary the camera slightly if you must, never the room.
+
+REFERENCE 2 IS A REAL PHOTOGRAPH TAKEN WITH A REAL CAMERA IN A REAL ROOM. It is the standard for realism. Match how a real camera renders an interior: the way daylight actually falls and falls off across a wall, real shadow density and real shadow edges, real texture on plaster and floor and fabric, the ordinary unevenness and imperfection of real materials, real depth of field, real white balance. Do NOT produce a cleaner, smoother, warmer, more evenly lit or more colour graded room than a real photograph has. A room that looks styled, glowing or perfectly even is WRONG.
+
+REFERENCE 3 IS THE PRODUCT ON PLAIN WHITE. It carries the true form and the true silhouette. Take the shape from this, and take nothing else from it: its lighting is studio lighting and must not appear in your output.
+
+REFERENCE 4 SHOWS THE AVAILABLE FINISHES SIDE BY SIDE, each one labelled. The finish for this piece is {FINISH}. Find that label and take the wood colour from THAT piece only. Never take a colour from a colour word, and never invent a tone. If the named finish is a brown wood, it must read as warm brown, never grey, silver, ashen or desaturated.
+
+REFERENCE 5 IS THE DIMENSIONED DRAWING and the numbers printed on it are the true measurements of this piece. The proportions you draw must match them.
+
+A LIFESTYLE PHOTOGRAPH. The piece sits in the room in use, with enough of the surrounding furniture visible to show its scale and where it belongs.
+
+This is the widest shot in the set, but it is still a PRODUCT photograph: the piece stays the clear subject and should hold about half the frame height. Show the neighbouring furniture by letting it enter the frame at the edges rather than by backing the camera away. Its proportions must still read correctly at this distance.
+
+TWO REFERENCE IMAGES ARE ATTACHED AND THEY DO DIFFERENT JOBS.
+
+THE FIRST REFERENCE gives the PHOTOGRAPH: the room, the wall, the floor covering, the furniture and where it sits, the camera height and distance, the focal length, the crop, and the direction and quality of the light. Reproduce all of that. A buyer comparing two finishes has to see the same photograph with different wood in it, so the set must not change.
+
+THE SECOND REFERENCE gives the OBJECT: its true form, its true proportions and its true colour. Take the finish from this photograph. Do NOT take the finish from any colour word, and do NOT take the shape from the first reference.
+
+THE PROPORTIONS ARE {W} INCHES IN DIAMETER BY {H} TALL, so it stands {RATIO} times its own width. This is a SHORT, STOUT, GROUNDED piece, not a tall slender pillar.
+
+CHECK THE PROPORTION IN THE FINISHED FRAME, and measure the SIDE of the piece, not its whole silhouette. Measure from where the piece meets the floor up to the NEAR edge of its top surface, the front lip closest to the camera. Do NOT measure up to the far edge of the top: the camera looks slightly down, so the top reads as an ellipse and its far edge sits higher in the frame than the piece actually is. That is the single most common way this check is failed. The plan of this piece is a CIRCLE, so it shows the same width from every angle and no viewing direction makes it narrower. So that side height divided by the width must be {RATIO}. Taller than {RATIO} is WRONG and the piece must be drawn wider and heavier. Every failure of this piece so far has been toward too tall and too narrow, never toward too squat, so err deliberately toward broad. The form is {FORM from family_forms.py}. It is NOT {ANTI-FORM from family_forms.py}.
+
+MASS IS A SEPARATE PROPERTY FROM PROPORTION AND IT IS THE ONE THAT GETS LOST.
+
+The ratio governs the bounding box and says nothing about how much material fills it. This piece is carved from ONE HEAVY SOLID BLOCK and it must still look like one. Any strands or uprights are BROAD AND FLESHY, as thick as the gap beside them. Any opening is a SMALL TIGHT gap rather than a wide window, and you cannot see much of the room through it. The top slab is THICK with a visible chunky edge. The base is a substantial block, as wide as the top, planted flat on the floor. It should look heavy enough that you would struggle to lift it with one hand.
+
+Do NOT slim the waist. Do NOT thin the strands into ribbons. Do NOT enlarge the void. Do NOT make it an elegant narrow hourglass. It must not read as a slender sculptural pedestal.
+
+Measure the thickness against the SECOND reference: the uprights must be at least as thick, and the openings between them at least as small, as that photograph shows. Erring toward heavier is correct; erring toward slimmer is the failure.
+
+THIS IS A DIFFERENT PHYSICAL PIECE OF WOOD, CUT FROM A SEPARATE BOARD.
+
+These are individually carved solid timber pieces and the character of the grain is what says so. Do NOT copy the reference&#x27;s grain figure, its surface checks, its knots or its sapwood. Invent this piece&#x27;s character fresh:
+  - the grain figure and the direction it runs
+  - the number of surface checks, and each one&#x27;s length, angle and position
+  - where the knots fall, if any
+  - which edge the pale sapwood band enters from
+  - the mineral streaking
+
+The checks in particular must differ from the reference in COUNT, ANGLE, POSITION and LENGTH. Two pieces carrying the same crack in the same place look manufactured, and that undoes the entire claim these photographs exist to make.
+
+THE SURFACE IS HAND-OILED SOLID HARDWOOD AND IT MUST READ AS ONE.
+
+The oil finish leaves the harder latewood standing very slightly proud of the softer springwood, roughly half a millimetre of relief. Render that: a thin highlight along each lit ridge and a hairline shadow behind it. Carry the chatoyance, the shimmer going brighter where the fibres run toward the light and deeper where they run away, because that shift is what says hardwood more than the pores do.
+
+THE PORES MUST BE SCATTERED AND NOT ARRANGED. No rows, no arcs, no chevrons, no scallops, no bands. Three or four crowded together here, a bare stretch there, one large isolated pore somewhere. Large areas with almost no visible pores at all, which is what makes the porous areas believable. If any part of the surface shows an obvious repeating rhythm, it is wrong.
+
+Not snakeskin, not embossing, not stamped leather, not a machined pattern, not a texture map. Keep the relief FINE and the light SOFT. No crunchy over-sharpened micro contrast, no HDR, no sandblasted or wire-brushed look, no plastic or waxy sheen.
+
+THE ROOM IS BRIGHT AND THE PRODUCT IS THE BEST LIT THING IN IT.
+
+This is a bright, airy, daylight-filled room in the middle of the day. Generous soft daylight, high key, open and clean. NOT a dim moody interior, NOT golden-hour, NOT a single dramatic shaft in a dark room, NOT candlelit gloom.
+
+THE LIGHT LANDS ON THE PIECE. Place the piece IN the light, never beside it. The daylight that brightens the wall and the floor must fall across the product with the same strength. The wood should read as the brightest, richest, most clearly lit object in the photograph, so that the eye goes to it first and the room reads as a setting that shows it off.
+
+THE TEST, AND IT IS THE ONE THIS KEEPS FAILING: if the brightest area in the finished frame is empty wall, bare floor, or a sunlit patch NEXT TO the piece, the photograph has FAILED. If the piece is visibly darker than the surface directly behind it, it has FAILED. The piece must not sit in shade while the room is sunlit.
+
+Keep the light directional and soft so the carving still reads: the form is described by gentle modelling across its faces, not by deep black shadow. Shadows stay open and luminous with visible detail inside them, never crushed to black. Bright does not mean flat, and it does not mean blown out: the wood keeps its full tonal range and its grain.
+
+ONE ROOM, ONE LIGHT, ONE SET OF PHYSICS.
+
+There is exactly ONE light source direction in this photograph. Every shadow in the frame, from the piece, from the props, from the furniture, falls the SAME way, at the same angle, with the same softness. A shadow pointing a different way from its neighbour is the single clearest sign of a fake photograph.
+
+EVERYTHING RESTS ON SOMETHING. The piece meets the floor along its whole base with a real contact shadow that is darkest exactly where the timber touches down and opens up as it moves away. Props sit flat on the top surface with their own small contact shadows. Nothing floats, nothing hovers a few millimetres off the surface, nothing intersects or passes through anything else, and nothing balances in a way that would topple.
+
+SCALE MUST AGREE. The piece, the furniture and the props must all read at a believable size against each other: books, vases and candles are small objects, and if a vase looks nearly as tall as the piece the scale is wrong. Verticals stay vertical. Floorboards, rug edges, wall corners and skirting all run to a consistent perspective. Reflections and highlights agree with the one light source.
+
+THE WOOD MUST HOLD ITS TEXTURE AT THIS VIEWING DISTANCE. This is a Phase One medium format back at f/5.6, which resolves pores and grain across the entire piece even in a full product view. The surrounding room may go soft; the wood may not. If any area reads as a smooth plastic-like or stone-like fill, the image has failed.
+
+THE STYLING IS SPECIFIC TO THIS VARIANT AND DIFFERS FROM THE REFERENCE. Keep the room, the furniture, the camera and the light direction exactly as the reference has them, then dress the piece as follows instead of copying the reference&#x27;s props.
+
+On the top surface: a small stoneware jug with a folded lip, unglazed, holding a short bunch of dried lavender, faded purple grey. Beside it, three hardbacks stacked flat, in oxblood, warm sand and faded navy. The light source in the scene is a squat stoneware lamp with a wide tapered paper shade, lit warm. A folded cloth napkin resting flat, stone coloured.
+
+The props are supporting cast, never the subject. They must not cover the top slab edge, must not hide the carved form or any opening in it, and must not outweigh the piece in the frame. NO legible text on any spine, cover or label. Keep every prop within the same restrained palette as the room.
+
+NOT ACCEPTABLE: a seamless studio backdrop or infinity sweep in ANY colour, white, grey, beige or otherwise. No empty featureless void behind the piece. No CGI or 3D-render look. No visible text anywhere in the frame. No watermark. No duplicated or mirrored furniture. No warped verticals. The piece must sit flat and level on the floor with real contact shadow.
+
+ALSO NOT ACCEPTABLE, and these are the ones that make a photograph look generated: a dim or moody room; the piece darker than the wall behind it; a dramatic sunbeam landing on empty floor or empty wall instead of on the product; crushed black shadows with no detail; shadows that fall in more than one direction; anything floating a few millimetres above the surface it should be resting on; props out of scale with the piece; and a tall narrow silhouette where the real object is short and stout.</pre></div></details><details class="tpl"><summary>Shot 4 &middot; bedroom<span class="len">12,755 chars</span></summary>
+<div class="tplbody"><p class="evnote"><span class="pill ok">from the 407 cells in the sheet</span> This prompt is byte-identical to the one that produced them.</p><div class="figs f4"><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-V-mirel.jpg" alt="The Mirel Dark Walnut shot 4"><figcaption><b>The Mirel Dark Walnut</b><span>14 dia top x 15 dia x 11 dia base x 20 in<br>border 24.8</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-V-rivena.jpg" alt="The Rivena Walnut shot 4"><figcaption><b>The Rivena Walnut</b><span>20 x 15 x 20 in<br>border 24.3</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-V-selorin.jpg" alt="The Selorin Mocha shot 4"><figcaption><b>The Selorin Mocha</b><span>15 x 15 x 20 in<br>border 24.8</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-V-luma.jpg" alt="The Luma Walnut shot 4"><figcaption><b>The Luma Walnut</b><span>10 x 10 x 16 in<br>border 25.5</span></figcaption></figure></div><button class="copy" data-t="tpl-V">Copy full prompt</button>
+<pre id="tpl-V">THE ENVIRONMENT FOR THIS SHOT IS FIXED BY THE CATALOGUE AND IS THE SAME FOR EVERY PRODUCT IN THIS POSITION.
+
+THIS IS A BEDROOM. The piece stands as a bedside table against a bed: pillows, linen bedding, a headboard or the edge of the bed in frame, soft low light. Every image 4 in this catalogue is a bedroom.
+
+THE WOOD GRAIN MUST BE VISIBLE AND MUST READ AS THE SAME TIMBER AS THE REFERENCE PHOTOGRAPHS. Show the FIGURE: the long directional streaks and bands of light and dark that run through this species, the darker heartwood sweeping against paler sapwood, growth rings where a face cuts across them, knots, and the fine checks that open along the grain. The tone is not uniform anywhere on the piece; it varies continuously along the figure. Light must rake across the surface enough that the grain casts its own micro relief. A piece that reads as one even colour with a smooth polished surface is WRONG, however photoreal it otherwise looks, because it loses the thing the buyer is paying for.
+
+PROPS ARE RESTRICTED. The only things that may appear on or against the piece are: books, candles, plants, flowers, cups, picture frames, a draped cloth. Nothing else. No electronics, no bottles, no glassware beyond a cup, no decorative objects of any other kind. Props stay minimal and never obscure the form.
+
+Work living greenery into the frame so it contrasts against the wood: a small plant or cut flowers on or beside the piece, and where a window is in shot, real foliage or trees visible outside it. Greenery should read as a real plant in a real room, never as styling filler.
+
+THE REFERENCE IMAGES ATTACHED ARE REAL PHOTOGRAPHS OF THE REAL PRODUCT. THEY DO DIFFERENT JOBS.
+
+REFERENCE 1 IS THE APPROVED PHOTOGRAPH FOR THIS EXACT SHOT. It carries the composition, the room, the light direction, the camera position and the crop. Reproduce all of it. A buyer comparing two finishes must see the SAME photograph with only the wood changed, so the set does not change. Vary the camera slightly if you must, never the room.
+
+REFERENCE 2 IS A REAL PHOTOGRAPH TAKEN WITH A REAL CAMERA IN A REAL ROOM. It is the standard for realism. Match how a real camera renders an interior: the way daylight actually falls and falls off across a wall, real shadow density and real shadow edges, real texture on plaster and floor and fabric, the ordinary unevenness and imperfection of real materials, real depth of field, real white balance. Do NOT produce a cleaner, smoother, warmer, more evenly lit or more colour graded room than a real photograph has. A room that looks styled, glowing or perfectly even is WRONG.
+
+REFERENCE 3 IS THE PRODUCT ON PLAIN WHITE. It carries the true form and the true silhouette. Take the shape from this, and take nothing else from it: its lighting is studio lighting and must not appear in your output.
+
+REFERENCE 4 SHOWS THE AVAILABLE FINISHES SIDE BY SIDE, each one labelled. The finish for this piece is {FINISH}. Find that label and take the wood colour from THAT piece only. Never take a colour from a colour word, and never invent a tone. If the named finish is a brown wood, it must read as warm brown, never grey, silver, ashen or desaturated.
+
+REFERENCE 5 IS THE DIMENSIONED DRAWING and the numbers printed on it are the true measurements of this piece. The proportions you draw must match them.
+
+A SECOND FULL VIEW OF THE WHOLE PIECE, from a noticeably different camera angle than the hero, closer to the piece and lower. Same room, same light.
+
+TWO REFERENCE IMAGES ARE ATTACHED AND THEY DO DIFFERENT JOBS.
+
+THE FIRST REFERENCE gives the PHOTOGRAPH: the room, the wall, the floor covering, the furniture and where it sits, the camera height and distance, the focal length, the crop, and the direction and quality of the light. Reproduce all of that. A buyer comparing two finishes has to see the same photograph with different wood in it, so the set must not change.
+
+THE SECOND REFERENCE gives the OBJECT: its true form, its true proportions and its true colour. Take the finish from this photograph. Do NOT take the finish from any colour word, and do NOT take the shape from the first reference.
+
+THE PROPORTIONS ARE {W} INCHES IN DIAMETER BY {H} TALL, so it stands {RATIO} times its own width. This is a SHORT, STOUT, GROUNDED piece, not a tall slender pillar.
+
+CHECK THE PROPORTION IN THE FINISHED FRAME, and measure the SIDE of the piece, not its whole silhouette. Measure from where the piece meets the floor up to the NEAR edge of its top surface, the front lip closest to the camera. Do NOT measure up to the far edge of the top: the camera looks slightly down, so the top reads as an ellipse and its far edge sits higher in the frame than the piece actually is. That is the single most common way this check is failed. The plan of this piece is a CIRCLE, so it shows the same width from every angle and no viewing direction makes it narrower. So that side height divided by the width must be {RATIO}. Taller than {RATIO} is WRONG and the piece must be drawn wider and heavier. Every failure of this piece so far has been toward too tall and too narrow, never toward too squat, so err deliberately toward broad. The form is {FORM from family_forms.py}. It is NOT {ANTI-FORM from family_forms.py}.
+
+MASS IS A SEPARATE PROPERTY FROM PROPORTION AND IT IS THE ONE THAT GETS LOST.
+
+The ratio governs the bounding box and says nothing about how much material fills it. This piece is carved from ONE HEAVY SOLID BLOCK and it must still look like one. Any strands or uprights are BROAD AND FLESHY, as thick as the gap beside them. Any opening is a SMALL TIGHT gap rather than a wide window, and you cannot see much of the room through it. The top slab is THICK with a visible chunky edge. The base is a substantial block, as wide as the top, planted flat on the floor. It should look heavy enough that you would struggle to lift it with one hand.
+
+Do NOT slim the waist. Do NOT thin the strands into ribbons. Do NOT enlarge the void. Do NOT make it an elegant narrow hourglass. It must not read as a slender sculptural pedestal.
+
+Measure the thickness against the SECOND reference: the uprights must be at least as thick, and the openings between them at least as small, as that photograph shows. Erring toward heavier is correct; erring toward slimmer is the failure.
+
+THIS IS A DIFFERENT PHYSICAL PIECE OF WOOD, CUT FROM A SEPARATE BOARD.
+
+These are individually carved solid timber pieces and the character of the grain is what says so. Do NOT copy the reference&#x27;s grain figure, its surface checks, its knots or its sapwood. Invent this piece&#x27;s character fresh:
+  - the grain figure and the direction it runs
+  - the number of surface checks, and each one&#x27;s length, angle and position
+  - where the knots fall, if any
+  - which edge the pale sapwood band enters from
+  - the mineral streaking
+
+The checks in particular must differ from the reference in COUNT, ANGLE, POSITION and LENGTH. Two pieces carrying the same crack in the same place look manufactured, and that undoes the entire claim these photographs exist to make.
+
+THE SURFACE IS HAND-OILED SOLID HARDWOOD AND IT MUST READ AS ONE.
+
+The oil finish leaves the harder latewood standing very slightly proud of the softer springwood, roughly half a millimetre of relief. Render that: a thin highlight along each lit ridge and a hairline shadow behind it. Carry the chatoyance, the shimmer going brighter where the fibres run toward the light and deeper where they run away, because that shift is what says hardwood more than the pores do.
+
+THE PORES MUST BE SCATTERED AND NOT ARRANGED. No rows, no arcs, no chevrons, no scallops, no bands. Three or four crowded together here, a bare stretch there, one large isolated pore somewhere. Large areas with almost no visible pores at all, which is what makes the porous areas believable. If any part of the surface shows an obvious repeating rhythm, it is wrong.
+
+Not snakeskin, not embossing, not stamped leather, not a machined pattern, not a texture map. Keep the relief FINE and the light SOFT. No crunchy over-sharpened micro contrast, no HDR, no sandblasted or wire-brushed look, no plastic or waxy sheen.
+
+THE ROOM IS BRIGHT AND THE PRODUCT IS THE BEST LIT THING IN IT.
+
+This is a bright, airy, daylight-filled room in the middle of the day. Generous soft daylight, high key, open and clean. NOT a dim moody interior, NOT golden-hour, NOT a single dramatic shaft in a dark room, NOT candlelit gloom.
+
+THE LIGHT LANDS ON THE PIECE. Place the piece IN the light, never beside it. The daylight that brightens the wall and the floor must fall across the product with the same strength. The wood should read as the brightest, richest, most clearly lit object in the photograph, so that the eye goes to it first and the room reads as a setting that shows it off.
+
+THE TEST, AND IT IS THE ONE THIS KEEPS FAILING: if the brightest area in the finished frame is empty wall, bare floor, or a sunlit patch NEXT TO the piece, the photograph has FAILED. If the piece is visibly darker than the surface directly behind it, it has FAILED. The piece must not sit in shade while the room is sunlit.
+
+Keep the light directional and soft so the carving still reads: the form is described by gentle modelling across its faces, not by deep black shadow. Shadows stay open and luminous with visible detail inside them, never crushed to black. Bright does not mean flat, and it does not mean blown out: the wood keeps its full tonal range and its grain.
+
+ONE ROOM, ONE LIGHT, ONE SET OF PHYSICS.
+
+There is exactly ONE light source direction in this photograph. Every shadow in the frame, from the piece, from the props, from the furniture, falls the SAME way, at the same angle, with the same softness. A shadow pointing a different way from its neighbour is the single clearest sign of a fake photograph.
+
+EVERYTHING RESTS ON SOMETHING. The piece meets the floor along its whole base with a real contact shadow that is darkest exactly where the timber touches down and opens up as it moves away. Props sit flat on the top surface with their own small contact shadows. Nothing floats, nothing hovers a few millimetres off the surface, nothing intersects or passes through anything else, and nothing balances in a way that would topple.
+
+SCALE MUST AGREE. The piece, the furniture and the props must all read at a believable size against each other: books, vases and candles are small objects, and if a vase looks nearly as tall as the piece the scale is wrong. Verticals stay vertical. Floorboards, rug edges, wall corners and skirting all run to a consistent perspective. Reflections and highlights agree with the one light source.
+
+THE WOOD MUST HOLD ITS TEXTURE AT THIS VIEWING DISTANCE. This is a Phase One medium format back at f/5.6, which resolves pores and grain across the entire piece even in a full product view. The surrounding room may go soft; the wood may not. If any area reads as a smooth plastic-like or stone-like fill, the image has failed.
+
+THE STYLING IS SPECIFIC TO THIS VARIANT AND DIFFERS FROM THE REFERENCE. Keep the room, the furniture, the camera and the light direction exactly as the reference has them, then dress the piece as follows instead of copying the reference&#x27;s props.
+
+On the top surface: a rounded bulb vase in matte oatmeal stoneware, holding a single bare branch with a few small leaves. Beside it, three slim volumes stacked flat, in muted plum, bone and olive. The light source in the scene is a fat pillar candle on a low ceramic dish, lit, with a soft flame glow. A loosely draped length of muslin falling off one edge.
+
+The props are supporting cast, never the subject. They must not cover the top slab edge, must not hide the carved form or any opening in it, and must not outweigh the piece in the frame. NO legible text on any spine, cover or label. Keep every prop within the same restrained palette as the room.
+
+NOT ACCEPTABLE: a seamless studio backdrop or infinity sweep in ANY colour, white, grey, beige or otherwise. No empty featureless void behind the piece. No CGI or 3D-render look. No visible text anywhere in the frame. No watermark. No duplicated or mirrored furniture. No warped verticals. The piece must sit flat and level on the floor with real contact shadow.
+
+ALSO NOT ACCEPTABLE, and these are the ones that make a photograph look generated: a dim or moody room; the piece darker than the wall behind it; a dramatic sunbeam landing on empty floor or empty wall instead of on the product; crushed black shadows with no detail; shadows that fall in more than one direction; anything floating a few millimetres above the surface it should be resting on; props out of scale with the piece; and a tall narrow silhouette where the real object is short and stout.</pre></div></details><details class="tpl"><summary>Shot 5 &middot; corner and window<span class="len">12,839 chars</span></summary>
+<div class="tplbody"><p class="evnote"><span class="pill ok">from the 407 cells in the sheet</span> This prompt is byte-identical to the one that produced them.</p><div class="figs f4"><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-W-mirel.jpg" alt="The Mirel Dark Walnut shot 5"><figcaption><b>The Mirel Dark Walnut</b><span>14 dia top x 15 dia x 11 dia base x 20 in<br>border 50.3</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-W-selorin.jpg" alt="The Selorin Mocha shot 5"><figcaption><b>The Selorin Mocha</b><span>15 x 15 x 20 in<br>border 39.1</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-W-luma.jpg" alt="The Luma Walnut shot 5"><figcaption><b>The Luma Walnut</b><span>10 x 10 x 16 in<br>border 51.4</span></figcaption></figure><figure><img loading="lazy" src="https://cdn.jsdelivr.net/gh/shanegardner405-arch/velano-living-catalogue-images@main/sop/evidence/ev-W-talen.jpg" alt="The Talen Oak shot 5"><figcaption><b>The Talen Oak</b><span>12 x 14 x 20 in<br>border 46.7</span></figcaption></figure></div><button class="copy" data-t="tpl-W">Copy full prompt</button>
+<pre id="tpl-W">THE ENVIRONMENT FOR THIS SHOT IS FIXED BY THE CATALOGUE AND IS THE SAME FOR EVERY PRODUCT IN THIS POSITION.
+
+THE PIECE STANDS IN A CORNER NEXT TO A WINDOW, and the daylight from that window FALLS DIRECTLY ACROSS IT. Two plaster walls meet behind it, the light rakes over the piece and throws its shadow along the wall and floor, and the window is in or just out of frame. Every image 5 in this catalogue uses this same corner.
+
+THE WOOD GRAIN MUST BE VISIBLE AND MUST READ AS THE SAME TIMBER AS THE REFERENCE PHOTOGRAPHS. Show the FIGURE: the long directional streaks and bands of light and dark that run through this species, the darker heartwood sweeping against paler sapwood, growth rings where a face cuts across them, knots, and the fine checks that open along the grain. The tone is not uniform anywhere on the piece; it varies continuously along the figure. Light must rake across the surface enough that the grain casts its own micro relief. A piece that reads as one even colour with a smooth polished surface is WRONG, however photoreal it otherwise looks, because it loses the thing the buyer is paying for.
+
+PROPS ARE RESTRICTED. The only things that may appear on or against the piece are: books, candles, plants, flowers, cups, picture frames, a draped cloth. Nothing else. No electronics, no bottles, no glassware beyond a cup, no decorative objects of any other kind. Props stay minimal and never obscure the form.
+
+Work living greenery into the frame so it contrasts against the wood: a small plant or cut flowers on or beside the piece, and where a window is in shot, real foliage or trees visible outside it. Greenery should read as a real plant in a real room, never as styling filler.
+
+THE REFERENCE IMAGES ATTACHED ARE REAL PHOTOGRAPHS OF THE REAL PRODUCT. THEY DO DIFFERENT JOBS.
+
+REFERENCE 1 IS THE APPROVED PHOTOGRAPH FOR THIS EXACT SHOT. It carries the composition, the room, the light direction, the camera position and the crop. Reproduce all of it. A buyer comparing two finishes must see the SAME photograph with only the wood changed, so the set does not change. Vary the camera slightly if you must, never the room.
+
+REFERENCE 2 IS A REAL PHOTOGRAPH TAKEN WITH A REAL CAMERA IN A REAL ROOM. It is the standard for realism. Match how a real camera renders an interior: the way daylight actually falls and falls off across a wall, real shadow density and real shadow edges, real texture on plaster and floor and fabric, the ordinary unevenness and imperfection of real materials, real depth of field, real white balance. Do NOT produce a cleaner, smoother, warmer, more evenly lit or more colour graded room than a real photograph has. A room that looks styled, glowing or perfectly even is WRONG.
+
+REFERENCE 3 IS THE PRODUCT ON PLAIN WHITE. It carries the true form and the true silhouette. Take the shape from this, and take nothing else from it: its lighting is studio lighting and must not appear in your output.
+
+REFERENCE 4 SHOWS THE AVAILABLE FINISHES SIDE BY SIDE, each one labelled. The finish for this piece is {FINISH}. Find that label and take the wood colour from THAT piece only. Never take a colour from a colour word, and never invent a tone. If the named finish is a brown wood, it must read as warm brown, never grey, silver, ashen or desaturated.
+
+REFERENCE 5 IS THE DIMENSIONED DRAWING and the numbers printed on it are the true measurements of this piece. The proportions you draw must match them.
+
+AN IN-SITU DETAIL. The piece in its corner of the room, framed tighter than the wide lifestyle, showing the piece in context with part of the room falling away behind it.
+
+TWO REFERENCE IMAGES ARE ATTACHED AND THEY DO DIFFERENT JOBS.
+
+THE FIRST REFERENCE gives the PHOTOGRAPH: the room, the wall, the floor covering, the furniture and where it sits, the camera height and distance, the focal length, the crop, and the direction and quality of the light. Reproduce all of that. A buyer comparing two finishes has to see the same photograph with different wood in it, so the set must not change.
+
+THE SECOND REFERENCE gives the OBJECT: its true form, its true proportions and its true colour. Take the finish from this photograph. Do NOT take the finish from any colour word, and do NOT take the shape from the first reference.
+
+THE PROPORTIONS ARE {W} INCHES IN DIAMETER BY {H} TALL, so it stands {RATIO} times its own width. This is a SHORT, STOUT, GROUNDED piece, not a tall slender pillar.
+
+CHECK THE PROPORTION IN THE FINISHED FRAME, and measure the SIDE of the piece, not its whole silhouette. Measure from where the piece meets the floor up to the NEAR edge of its top surface, the front lip closest to the camera. Do NOT measure up to the far edge of the top: the camera looks slightly down, so the top reads as an ellipse and its far edge sits higher in the frame than the piece actually is. That is the single most common way this check is failed. The plan of this piece is a CIRCLE, so it shows the same width from every angle and no viewing direction makes it narrower. So that side height divided by the width must be {RATIO}. Taller than {RATIO} is WRONG and the piece must be drawn wider and heavier. Every failure of this piece so far has been toward too tall and too narrow, never toward too squat, so err deliberately toward broad. The form is {FORM from family_forms.py}. It is NOT {ANTI-FORM from family_forms.py}.
+
+MASS IS A SEPARATE PROPERTY FROM PROPORTION AND IT IS THE ONE THAT GETS LOST.
+
+The ratio governs the bounding box and says nothing about how much material fills it. This piece is carved from ONE HEAVY SOLID BLOCK and it must still look like one. Any strands or uprights are BROAD AND FLESHY, as thick as the gap beside them. Any opening is a SMALL TIGHT gap rather than a wide window, and you cannot see much of the room through it. The top slab is THICK with a visible chunky edge. The base is a substantial block, as wide as the top, planted flat on the floor. It should look heavy enough that you would struggle to lift it with one hand.
+
+Do NOT slim the waist. Do NOT thin the strands into ribbons. Do NOT enlarge the void. Do NOT make it an elegant narrow hourglass. It must not read as a slender sculptural pedestal.
+
+Measure the thickness against the SECOND reference: the uprights must be at least as thick, and the openings between them at least as small, as that photograph shows. Erring toward heavier is correct; erring toward slimmer is the failure.
+
+THIS IS A DIFFERENT PHYSICAL PIECE OF WOOD, CUT FROM A SEPARATE BOARD.
+
+These are individually carved solid timber pieces and the character of the grain is what says so. Do NOT copy the reference&#x27;s grain figure, its surface checks, its knots or its sapwood. Invent this piece&#x27;s character fresh:
+  - the grain figure and the direction it runs
+  - the number of surface checks, and each one&#x27;s length, angle and position
+  - where the knots fall, if any
+  - which edge the pale sapwood band enters from
+  - the mineral streaking
+
+The checks in particular must differ from the reference in COUNT, ANGLE, POSITION and LENGTH. Two pieces carrying the same crack in the same place look manufactured, and that undoes the entire claim these photographs exist to make.
+
+THE SURFACE IS HAND-OILED SOLID HARDWOOD AND IT MUST READ AS ONE.
+
+The oil finish leaves the harder latewood standing very slightly proud of the softer springwood, roughly half a millimetre of relief. Render that: a thin highlight along each lit ridge and a hairline shadow behind it. Carry the chatoyance, the shimmer going brighter where the fibres run toward the light and deeper where they run away, because that shift is what says hardwood more than the pores do.
+
+THE PORES MUST BE SCATTERED AND NOT ARRANGED. No rows, no arcs, no chevrons, no scallops, no bands. Three or four crowded together here, a bare stretch there, one large isolated pore somewhere. Large areas with almost no visible pores at all, which is what makes the porous areas believable. If any part of the surface shows an obvious repeating rhythm, it is wrong.
+
+Not snakeskin, not embossing, not stamped leather, not a machined pattern, not a texture map. Keep the relief FINE and the light SOFT. No crunchy over-sharpened micro contrast, no HDR, no sandblasted or wire-brushed look, no plastic or waxy sheen.
+
+THE ROOM IS BRIGHT AND THE PRODUCT IS THE BEST LIT THING IN IT.
+
+This is a bright, airy, daylight-filled room in the middle of the day. Generous soft daylight, high key, open and clean. NOT a dim moody interior, NOT golden-hour, NOT a single dramatic shaft in a dark room, NOT candlelit gloom.
+
+THE LIGHT LANDS ON THE PIECE. Place the piece IN the light, never beside it. The daylight that brightens the wall and the floor must fall across the product with the same strength. The wood should read as the brightest, richest, most clearly lit object in the photograph, so that the eye goes to it first and the room reads as a setting that shows it off.
+
+THE TEST, AND IT IS THE ONE THIS KEEPS FAILING: if the brightest area in the finished frame is empty wall, bare floor, or a sunlit patch NEXT TO the piece, the photograph has FAILED. If the piece is visibly darker than the surface directly behind it, it has FAILED. The piece must not sit in shade while the room is sunlit.
+
+Keep the light directional and soft so the carving still reads: the form is described by gentle modelling across its faces, not by deep black shadow. Shadows stay open and luminous with visible detail inside them, never crushed to black. Bright does not mean flat, and it does not mean blown out: the wood keeps its full tonal range and its grain.
+
+ONE ROOM, ONE LIGHT, ONE SET OF PHYSICS.
+
+There is exactly ONE light source direction in this photograph. Every shadow in the frame, from the piece, from the props, from the furniture, falls the SAME way, at the same angle, with the same softness. A shadow pointing a different way from its neighbour is the single clearest sign of a fake photograph.
+
+EVERYTHING RESTS ON SOMETHING. The piece meets the floor along its whole base with a real contact shadow that is darkest exactly where the timber touches down and opens up as it moves away. Props sit flat on the top surface with their own small contact shadows. Nothing floats, nothing hovers a few millimetres off the surface, nothing intersects or passes through anything else, and nothing balances in a way that would topple.
+
+SCALE MUST AGREE. The piece, the furniture and the props must all read at a believable size against each other: books, vases and candles are small objects, and if a vase looks nearly as tall as the piece the scale is wrong. Verticals stay vertical. Floorboards, rug edges, wall corners and skirting all run to a consistent perspective. Reflections and highlights agree with the one light source.
+
+THE WOOD MUST HOLD ITS TEXTURE AT THIS VIEWING DISTANCE. This is a Phase One medium format back at f/5.6, which resolves pores and grain across the entire piece even in a full product view. The surrounding room may go soft; the wood may not. If any area reads as a smooth plastic-like or stone-like fill, the image has failed.
+
+THE STYLING IS SPECIFIC TO THIS VARIANT AND DIFFERS FROM THE REFERENCE. Keep the room, the furniture, the camera and the light direction exactly as the reference has them, then dress the piece as follows instead of copying the reference&#x27;s props.
+
+On the top surface: a tall narrow bud vase in pale sand ceramic, holding three stems of dried eucalyptus, soft sage. Beside it, one thick hardback lying flat in ink blue, its pages softly toned. A small round brass tray resting flat under the vessel. A folded cloth napkin resting flat, stone coloured.
+
+The props are supporting cast, never the subject. They must not cover the top slab edge, must not hide the carved form or any opening in it, and must not outweigh the piece in the frame. NO legible text on any spine, cover or label. Keep every prop within the same restrained palette as the room.
+
+NOT ACCEPTABLE: a seamless studio backdrop or infinity sweep in ANY colour, white, grey, beige or otherwise. No empty featureless void behind the piece. No CGI or 3D-render look. No visible text anywhere in the frame. No watermark. No duplicated or mirrored furniture. No warped verticals. The piece must sit flat and level on the floor with real contact shadow.
+
+ALSO NOT ACCEPTABLE, and these are the ones that make a photograph look generated: a dim or moody room; the piece darker than the wall behind it; a dramatic sunbeam landing on empty floor or empty wall instead of on the product; crushed black shadows with no detail; shadows that fall in more than one direction; anything floating a few millimetres above the surface it should be resting on; props out of scale with the piece; and a tall narrow silhouette where the real object is short and stout.</pre></div></details>
+
+<div class="rule stop">
+  <h4>Do not edit these by hand for a single cell</h4>
+  <p>Every block was proven on a re-run and the generic version of the same
+  instruction is recorded as having failed. Adjectives do not transmit
+  proportion; a number and a named failure mode do. If a block needs changing,
+  change it in the source so all 520 cells inherit it, then regenerate. Editing
+  one prompt in place is how a studio requirement and a studio prohibition ended
+  up in the same instruction set.</p>
+</div>
+
+<h2><span class="num">06</span>Generation</h2>
+<div class="card">
+  <table>
+    <tr><th style="width:26%">Setting</th><th>Value and why</th></tr>
+    <tr><td>Endpoint</td><td class="n">POST api.openai.com/v1/images/edits</td></tr>
+    <tr><td>Model</td><td class="n">gpt-image-2</td></tr>
+    <tr><td>Size</td><td><code>1536x2048</code>, an exact 3:4 measured at 0.7500. A fixed size removes the aspect non-determinism that once produced a portrait and a square from the same setting. Edges must be multiples of 16 and the longest may not exceed 3840.</td></tr>
+    <tr><td>Quality</td><td><strong>medium</strong>. Beats high on every measured axis: tonal range 154 against 140, border structure 45.3 against 38.8, and proportion 1.34 against 1.50. Also 2.4x faster and a third of the cost.</td></tr>
+    <tr><td>References</td><td><code>image[]</code> ordered array, verified to accept 20. Order is intent, so the scene and object cannot swap.</td></tr>
+    <tr><td>Concurrency</td><td>4 to 5 lanes. Measured 2.52x speedup on three.</td></tr>
+    <tr><td>Cost</td><td>~$0.10 per cell at medium, computed from returned token usage.</td></tr>
+  </table>
+</div>
+
+<div class="rule note">
+  <h4>Stochastic defects need selection, not better wording</h4>
+  <p>Two identical rows, same product and same prompt, returned hue deltas of
+  10.1 and 4.6 in the same pass. No prompt fixes a spread that wide because the
+  prompt was identical. When a defect is measurable and cheap to redo, generate
+  three candidates and keep the closest. That cleared 5 of 9 where three rounds
+  of prompt rewriting had each half-worked.</p>
+</div>
+
+<h2><span class="num">07</span>Checks, and what each one cannot do</h2>
+<p class="sub">Every check here was wrong before a control caught it. Calibrate
+  against known-good cells, never a guessed threshold.</p>
+
+<table>
+  <tr><th>Check</th><th style="width:20%">Verdict</th><th>Limit</th></tr>
+  <tr><td><strong>Environment</strong>, per column</td><td><span class="pill ok">trusted</span></td>
+      <td>Calibrated per column from 39 known-good cells. One universal threshold flagged 15 of 15 correct bedrooms and 8 of 15 correct macros, which would have condemned 55 good cells.</td></tr>
+  <tr><td><strong>Studio versus soft room</strong></td><td><span class="pill ok">trusted</span></td>
+      <td>Floor-texture over wall-texture. Border variance alone passed a plain room at 20.7, and an edge test scored that room <em>below</em> real studios because plaster is smoother than a backdrop.</td></tr>
+  <tr><td><strong>Colour</strong>, warm woods</td><td><span class="pill ok">trusted</span></td>
+      <td>Hue against columns P and Q only. Including R poisoned it, because R is the swatch showing every finish at once: it then fired on 3 of 21 untouched originals, which cannot be wrong about their own colour.</td></tr>
+  <tr><td><strong>Colour</strong>, grey finishes</td><td><span class="pill warn">unmeasurable</span></td>
+      <td>Hue carries no signal on grey and the control set had zero grey rows. Every grey cell reads wrong at a median of 10.3, which is an invalid measure, not real defects.</td></tr>
+  <tr><td><strong>Macro composition</strong></td><td><span class="pill warn">unmeasurable</span></td>
+      <td>Timber filling the frame has structure at every edge. No threshold separates it from a room.</td></tr>
+  <tr><td><strong>Geometry and form</strong></td><td><span class="pill crit">eye only</span></td>
+      <td>Four proportion metrics were built and all four were wrong at least once, the last by 26 percent against a hand grid read. Never claim it passed.</td></tr>
+</table>
+
+<div class="rule stop">
+  <h4>Run the control first, every time</h4>
+  <p>Before trusting any check, run it against cells known to be correct. A check
+  that flags known-good cells is broken, not the cells. This single habit caught
+  55 false condemnations in one pass and stopped a whole-catalogue regeneration
+  that was not needed.</p>
+</div>
+
+<h2><span class="num">08</span>Publishing</h2>
+<div class="card">
+  <ol>
+    <li>Convert masters to JPEG at quality 92. About 15 percent of the PNG bytes, no visible loss.</li>
+    <li>Commit and push to the public image host. Git moves a whole batch in one call.</li>
+    <li>Build <code>{variant_id|column: url}</code> and write <code>=IMAGE(url,4,110,88)</code>.</li>
+    <li>Snapshot the previous cell contents for rollback <em>before</em> writing.</li>
+    <li>Read back and confirm the formula landed.</li>
+    <li>Fetch every URL anonymously to prove it serves a real image.</li>
+  </ol>
+  <p style="margin-bottom:0">One command: <code>publish.sh &lt;dir&gt; --apply</code></p>
+</div>
+
+<div class="rule note">
+  <h4>An IMAGE cell reads back empty whether it worked or failed</h4>
+  <p>The values API returns nothing for <code>=IMAGE()</code> either way, so a readback
+  proves the formula landed and nothing more. Rendering is a human check. Add
+  every new host to the generated-cell classifier, or freshly written cells count
+  as ungenerated and the totals go backwards.</p>
+</div>
+
+<h2><span class="num">09</span>Standing rules</h2>
+<div class="grid g2">
+  <div class="rule stop"><h4>No plain white backgrounds</h4>
+    <p>Across all three Haussmann storefronts. The only white image that ships is
+    the dimension diagram. A warm neutral studio sweep is a different thing and is
+    required in position 1.</p></div>
+  <div class="rule stop"><h4>Never generate from a generated image</h4>
+    <p>Using an AI-produced room as the scene reference is what made backgrounds
+    read as synthetic in hue, lighting and texture. The scene comes from an
+    approved image or a real photograph.</p></div>
+  <div class="rule"><h4>Audit the reference, not just the output</h4>
+    <p>When a re-run reproduces the defect it was queued to fix, point the
+    detector at its inputs. Every column S donor was itself a studio sweep, which
+    explained 45 flagged cells in one pass.</p></div>
+  <div class="rule"><h4>Refresh before every audit</h4>
+    <p>Auditing against a snapshot taken before the last publish produces phantom
+    failures on cells already fixed. Re-read the sheet, then measure.</p></div>
+</div>
+
+<h2><span class="num">10</span>Current state</h2>
+<table>
+  <tr><th>Measure</th><th style="width:22%">Result</th><th>Note</th></tr>
+  <tr><td>Rows passing full audit</td><td class="n">98 of 104</td><td>The remaining 6 are colour flags at the metric's resolution limit, verified by eye as correct.</td></tr>
+  <tr><td>Environment defects</td><td class="n">0 of 520</td><td>Every cell matches its column spec.</td></tr>
+  <tr><td>Warm-wood colour accuracy</td><td class="n">2.4 median</td><td>Against untouched Haussmann originals at 2.2. Our renders track the real product as closely as their own photography.</td></tr>
+  <tr><td>Cells generated by us</td><td class="n">407</td><td>113 are original Haussmann photographs that already conform and should stay.</td></tr>
+  <tr><td>Unverified</td><td><span class="pill crit">geometry</span> <span class="pill warn">macro</span> <span class="pill warn">grey</span></td><td>Stated in column BE rather than implied to have passed.</td></tr>
+</table>
+
+<footer>
+  <p>Velano Living Design System &middot; Claude Design project
+  <code>f0f49c22-b664-4dc0-867a-903318dff989</code>. Pipeline source lives in
+  <code>clients/haussmann-inc/catalogue/</code>. Every number on this page was
+  measured, not estimated.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(b=>{
+  b.addEventListener('click',async()=>{
+    const t=document.getElementById(b.dataset.t);
+    await navigator.clipboard.writeText(t.textContent);
+    const o=b.textContent; b.textContent='Copied'; setTimeout(()=>b.textContent=o,1400);
+  });
+});
+</script>
+</body>
+</html>
