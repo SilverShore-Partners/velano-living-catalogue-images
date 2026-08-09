@@ -4,7 +4,7 @@ The standard for producing every Velano Living catalogue image. Written from a
 full run of 520 cells and corrected wherever a control proved a check wrong.
 
 **Live and retrievable:**
-https://shanegardner405-arch.github.io/velano-living-catalogue-images/sop/
+https://silvershore-partners.github.io/velano-living-catalogue-images/sop/
 
 ## Custody
 
@@ -16,7 +16,7 @@ https://shanegardner405-arch.github.io/velano-living-catalogue-images/sop/
 | Client registry pointer | SilverShore repo, `clients/haussmann-inc/IMAGE-GENERATION-SOP.md` |
 
 This repository is the active one. The repo the client registry calls canonical,
-`shanegardner405-arch/velano-haussmann-aios`, was ARCHIVED and made read-only on
+`SilverShore-Partners/velano-haussmann-aios`, was ARCHIVED and made read-only on
 2026-07-22 and cannot accept a pointer. Publishing here also avoids the paid-plan
 requirement for Pages on a private repo, and this repository already serves all
 42 images the document embeds. It was scanned before publication and
